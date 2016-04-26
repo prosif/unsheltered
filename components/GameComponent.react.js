@@ -3,7 +3,7 @@ import React from 'react';
 var GameComponent = React.createClass({
 	render: function(){
 		return(
-			<div>HEY</div>
+			<img src="images/mockup.png" />
 		);
 	}
 });

@@ -2,4 +2,9 @@
 	background: url('../images/unsheltered_resized.jpg');
 	height: 481px;
 	width: 667px;
+	margin: 0 auto;
+}
+
+.link:hover{
+	cursor: pointer;
 }
