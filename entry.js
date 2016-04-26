@@ -4,5 +4,5 @@ import React from 'react';
 
 ReactDOM.render(
     <MasterComponent />,
-    document.getElementById('game')
+    document.getElementById('content')
 );
