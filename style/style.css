@@ -12,10 +12,10 @@
 }
 
 #status{
-	height: 15%;
-	width: 20%;
-	position: relative;
-	top: 85%;
+	height: 80px;
+	width: 100px;
+	position: absolute;
+	top: 409px;
 	background: lightgray;
 }
 
