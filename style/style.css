@@ -5,6 +5,20 @@
 	margin: 0 auto;
 }
 
+#game-master{
+	background: url('../images/mockup.png');
+	height:481px;
+	width: 667px;
+}
+
+#status{
+	height: 15%;
+	width: 20%;
+	position: relative;
+	top: 85%;
+	background: lightgray;
+}
+
 .link:hover{
 	cursor: pointer;
 }
