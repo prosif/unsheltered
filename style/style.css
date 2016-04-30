@@ -22,3 +22,37 @@
 .link:hover{
 	cursor: pointer;
 }
+
+.event-description p{
+	margin: 0;
+	padding: 0;
+}
+
+.event-description {
+    width: 50%;
+    margin: 0 auto;
+    height: 50%;
+    top: 25%;
+    position: relative;
+    background: white;
+}
+
+.event-description .close-button {
+    top: 80%;
+    text-align: center;
+    border: 1px solid;
+    position: relative;
+    height: 8%;
+    width: 49%;
+    float: left;
+}
+
+.event-description .accept-button {
+    top: 80%;
+    text-align: center;
+    border: 1px solid;
+    position: relative;
+    height: 8%;
+    width: 49%;
+    float: right;
+}

@@ -10,51 +10,92 @@ var GameComponent = React.createClass({
 			playerHealth: 85,
 			playerTime: 0,
 			events: [
-			]
+			],
+			activeEvent: null
 		});
 	},
 
+	renderEventDetail: function(){
+		return(
+			<div className="event-description">
+				<p>
+				{this.state.activeEvent.text}
+				</p>
+				<div className="close-button link" onClick={this.onClose}>Reject</div>
+				<div className="accept-button link" onClick={this.onAccept}>Accept</div>
+			</div>
+		);
+	},
+
+	onAccept: function(){
+		this.onClose();
+	},
+
+	onClose: function(){
+		this.setState({activeEvent: null});
+	},
+
+	onClickEvent: function(eventId){
+		this.setState({activeEvent: this.state.events[eventId]});
+	},
+
 	generateTenderloinEvent: function(){
-		var newEvent = {id: this.incrementCount(), type: "high", top: 100, left: 350};
-		// Call self again after random amount of time < 1 minute
+		var newEvent = {
+			id: this.incrementCount(), 
+			type: "high", 
+			top: 50, 
+			left: 350,
+			text: "Event one"
+		};
 		var nextCallTime = Math.random() * 60 * 1000;
 		var currentEvents = this.state.events;
 		currentEvents.push(newEvent);
 		this.setState({events: currentEvents});
-		console.log("Going to call myself again in", nextCallTime / 1000, "seconds");
 		window.setTimeout(this.generateTenderloinEvent, nextCallTime);
 	},
 
 	generateMissionEvent: function(){
-		var newEvent = {id: this.incrementCount(), type: "medium", top: 200, left: 350};
-		// Call self again after random amount of time < 1 minute
+		var newEvent = {
+			id: this.incrementCount(), 
+			type: "medium", 
+			top: 150, 
+			left: 350,
+			text: "Event two"
+		};
 		var nextCallTime = Math.random() * 60 * 1000;
 		var currentEvents = this.state.events;
 		currentEvents.push(newEvent);
 		this.setState({events: currentEvents});
-		console.log("Going to call myself again in", nextCallTime / 1000, "seconds");
 		window.setTimeout(this.generateTenderloinEvent, nextCallTime);
 	},
 
 	generateSunsetEvent: function(){
-		var newEvent = {id: this.incrementCount(), type: "health", top: 300, left: 350};
-		// Call self again after random amount of time < 1 minute
+		var newEvent = {
+			id: this.incrementCount(), 
+			type: "health", 
+			top: 250, 
+			left: 350,
+			text: "Health event"
+		};
 		var nextCallTime = Math.random() * 60 * 1000;
 		var currentEvents = this.state.events;
 		currentEvents.push(newEvent);
 		this.setState({events: currentEvents});
-		console.log("Going to call myself again in", nextCallTime / 1000, "seconds");
 		window.setTimeout(this.generateTenderloinEvent, nextCallTime);
 	},
 
 	generateHealthEvent: function(){
-		var newEvent = {id: this.incrementCount(), type: "low", top: 400, left: 350};
-		// Call self again after random amount of time < 1 minute
+		var newEvent = {
+			id: this.incrementCount(), 
+			type: "low", 
+			top: 350, 
+			left: 350,
+			text: "Event three"
+		};
 		var nextCallTime = Math.random() * 60 * 1000;
 		var currentEvents = this.state.events;
 		currentEvents.push(newEvent);
 		this.setState({events: currentEvents});
-		console.log("Going to call myself again in", nextCallTime / 1000, "seconds");
 		window.setTimeout(this.generateTenderloinEvent, nextCallTime);
 	},
 
@@ -68,17 +109,23 @@ var GameComponent = React.createClass({
 	incrementCount: function(){
 		var currentCount = this.state.eventIndex;
 		this.setState({eventIndex: currentCount + 1});
-		return currentCount + 1;
+		return currentCount;
 	},
 
 	render: function(){
 		var events = this.state.events.map(function(event){
-			return <Event key={event.id} type={event.type} left={event.left} top={event.top} />;
-		});
+			return <Event onClick={this.onClickEvent} key={event.id} type={event.type} left={event.left} top={event.top} id={event.id}/>;
+		}.bind(this));
+
+		var eventDetail;
+		if(this.state.activeEvent){
+			eventDetail = this.renderEventDetail();
+		}
 
 		return(
 			<div id="game-master">
 			{events}
+			{eventDetail}
 			<PlayerStatus 
 				money={this.state.playerMoney} 
 				health={this.state.playerHealth}

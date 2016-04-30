@@ -1,6 +1,11 @@
 import React from 'react';
 
 var Event = React.createClass({
+
+	onClick: function(){
+		this.props.onClick(this.props.id);
+	},
+
 	render: function(){
 		var imageSource;
 		switch(this.props.type){
@@ -23,12 +28,12 @@ var Event = React.createClass({
 			width: "40px",
 			position: "absolute",
 			left: (window.innerWidth / 2 - 333) + this.props.left + "px",
-			top: (window.innerHeight / 2 - 240) + this.props.top + "px",
+			top: this.props.top + "px",
 			backgroundImage: 'url(' + imageSource + ')',
 		};
 
 		return(
-			<div style={style}>
+			<div className="link" onClick={this.onClick} style={style}>
 			</div>
 		)
 	}
