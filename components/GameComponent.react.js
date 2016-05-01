@@ -1,6 +1,7 @@
 import React from 'react';
 import PlayerStatus from './PlayerStatus.react';
 import Event from './Event.react';
+import Player from './Player.react';
 
 var GameComponent = React.createClass({
 	getInitialState: function(){
@@ -10,7 +11,9 @@ var GameComponent = React.createClass({
 			playerHealth: 85,
 			playerTime: 0,
 			events: {},
-			activeEvent: null
+			activeEvent: null,
+			playerX: 250,
+			playerY: 250
 		});
 	},
 
@@ -63,6 +66,8 @@ var GameComponent = React.createClass({
 		var currentTime = this.state.playerTime;
 		var currentMoney = this.state.playerMoney;
 		var events = this.state.events;
+		var newPlayerX = currentEvent.left;
+		var newPlayerY = currentEvent.top + 30;
 		if(currentEvent.type == "health"){
 			currentMoney -= currentEvent.cost;
 			currentTime += currentEvent.time;
@@ -71,7 +76,9 @@ var GameComponent = React.createClass({
 				playerMoney: currentMoney,
 				playerTime: currentTime,
 				playerHealth: currentHealth,
-				events: events
+				events: events,
+				playerX: newPlayerX,
+				playerY: newPlayerY
 			});
 		}
 		else{
@@ -80,7 +87,9 @@ var GameComponent = React.createClass({
 			this.setState({
 				playerMoney: currentMoney,
 				playerTime: currentTime,
-				events: events
+				events: events,
+				playerX: newPlayerX,
+				playerY: newPlayerY
 			});
 		}
 		this.onClose();
@@ -127,7 +136,7 @@ var GameComponent = React.createClass({
 		var currentEvents = this.state.events;
 		currentEvents[newEvent.id] = newEvent;
 		this.setState({events: currentEvents});
-		window.setTimeout(this.generateTenderloinEvent, nextCallTime);
+		window.setTimeout(this.generateMissionEvent, nextCallTime);
 	},
 
 	generateSunsetEvent: function(){
@@ -145,7 +154,7 @@ var GameComponent = React.createClass({
 		var currentEvents = this.state.events;
 		currentEvents[newEvent.id] = newEvent;
 		this.setState({events: currentEvents});
-		window.setTimeout(this.generateTenderloinEvent, nextCallTime);
+		window.setTimeout(this.generateSunsetEvent, nextCallTime);
 	},
 
 	generateHealthEvent: function(){
@@ -162,7 +171,7 @@ var GameComponent = React.createClass({
 		var currentEvents = this.state.events;
 		currentEvents[newEvent.id] = newEvent;
 		this.setState({events: currentEvents});
-		window.setTimeout(this.generateTenderloinEvent, nextCallTime);
+		window.setTimeout(this.generateHealthEvent, nextCallTime);
 	},
 
 	componentDidMount: function(){
@@ -175,7 +184,7 @@ var GameComponent = React.createClass({
 	incrementCount: function(){
 		var currentCount = this.state.eventIndex;
 		this.setState({eventIndex: currentCount + 1});
-		return currentCount;
+		return currentCount + 1;
 	},
 
 	render: function(){
@@ -192,6 +201,7 @@ var GameComponent = React.createClass({
 		return(
 			<div id="game-master">
 			{events}
+			<Player left={this.state.playerX} top={this.state.playerY} />
 			{eventDetail}
 			<PlayerStatus 
 				money={this.state.playerMoney} 
