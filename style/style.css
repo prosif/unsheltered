@@ -38,21 +38,21 @@
 }
 
 .event-description .close-button {
-    top: 80%;
+    bottom: 0;
+    right: 0;
     text-align: center;
     border: 1px solid;
-    position: relative;
+    position: absolute;
     height: 8%;
     width: 49%;
-    float: left;
 }
 
 .event-description .accept-button {
-    top: 80%;
+    bottom: 0;
+    left: 0;
     text-align: center;
     border: 1px solid;
-    position: relative;
+    position: absolute;
     height: 8%;
     width: 49%;
-    float: right;
 }

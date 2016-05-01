@@ -9,26 +9,83 @@ var GameComponent = React.createClass({
 			playerMoney: 15,
 			playerHealth: 85,
 			playerTime: 0,
-			events: [
-			],
+			events: {},
 			activeEvent: null
 		});
 	},
 
 	renderEventDetail: function(){
-		return(
-			<div className="event-description">
-				<p>
-				{this.state.activeEvent.text}
-				</p>
-				<div className="close-button link" onClick={this.onClose}>Reject</div>
-				<div className="accept-button link" onClick={this.onAccept}>Accept</div>
-			</div>
-		);
+		if(this.state.activeEvent.type == "health"){
+			return(
+				<div className="event-description">
+					<div>
+						<p>
+						{this.state.activeEvent.text}
+						</p>
+						<p>
+						Takes {this.state.activeEvent.time} hours
+						</p>
+						<p>
+						Cost: {this.state.activeEvent.cost}
+						</p>
+						<p>
+						Gain: {this.state.activeEvent.health} health
+						</p>
+					</div>
+					<div className="close-button link" onClick={this.onClose}>Reject</div>
+					<div className="accept-button link" onClick={this.onAccept}>Accept</div>
+				</div>
+			);
+		}
+		else{
+			return(
+				<div className="event-description">
+					<p>
+					{this.state.activeEvent.text}
+					</p>
+					<p>
+					Takes: {this.state.activeEvent.time} hours
+					</p>
+					<p>
+					Reward: ${this.state.activeEvent.reward}
+					</p>
+					<div className="close-button link" onClick={this.onClose}>Reject</div>
+					<div className="accept-button link" onClick={this.onAccept}>Accept</div>
+				</div>
+			);
+		}
 	},
 
 	onAccept: function(){
+		// TODO: Calculate outcome. For now, always succeed.
+		var currentEvent = this.state.activeEvent;
+		var currentHealth = this.state.playerHealth;
+		var currentTime = this.state.playerTime;
+		var currentMoney = this.state.playerMoney;
+		var events = this.state.events;
+		if(currentEvent.type == "health"){
+			currentMoney -= currentEvent.cost;
+			currentTime += currentEvent.time;
+			currentHealth += currentEvent.health;
+			this.setState({
+				playerMoney: currentMoney,
+				playerTime: currentTime,
+				playerHealth: currentHealth,
+				events: events
+			});
+		}
+		else{
+			currentMoney += currentEvent.reward;
+			currentTime += currentEvent.time;
+			this.setState({
+				playerMoney: currentMoney,
+				playerTime: currentTime,
+				events: events
+			});
+		}
 		this.onClose();
+		delete events[currentEvent.id];
+		this.setState({events: events});
 	},
 
 	onClose: function(){
@@ -45,11 +102,13 @@ var GameComponent = React.createClass({
 			type: "high", 
 			top: 50, 
 			left: 350,
-			text: "Event one"
+			text: "Event one",
+			reward: 35,
+			time: 3
 		};
 		var nextCallTime = Math.random() * 60 * 1000;
 		var currentEvents = this.state.events;
-		currentEvents.push(newEvent);
+		currentEvents[newEvent.id] = newEvent;
 		this.setState({events: currentEvents});
 		window.setTimeout(this.generateTenderloinEvent, nextCallTime);
 	},
@@ -60,11 +119,13 @@ var GameComponent = React.createClass({
 			type: "medium", 
 			top: 150, 
 			left: 350,
-			text: "Event two"
+			text: "Event two",
+			reward: 15,
+			time: 2
 		};
 		var nextCallTime = Math.random() * 60 * 1000;
 		var currentEvents = this.state.events;
-		currentEvents.push(newEvent);
+		currentEvents[newEvent.id] = newEvent;
 		this.setState({events: currentEvents});
 		window.setTimeout(this.generateTenderloinEvent, nextCallTime);
 	},
@@ -75,11 +136,14 @@ var GameComponent = React.createClass({
 			type: "health", 
 			top: 250, 
 			left: 350,
-			text: "Health event"
+			text: "Health event",
+			health: 15,
+			time: 1,
+			cost: 10
 		};
 		var nextCallTime = Math.random() * 60 * 1000;
 		var currentEvents = this.state.events;
-		currentEvents.push(newEvent);
+		currentEvents[newEvent.id] = newEvent;
 		this.setState({events: currentEvents});
 		window.setTimeout(this.generateTenderloinEvent, nextCallTime);
 	},
@@ -90,11 +154,13 @@ var GameComponent = React.createClass({
 			type: "low", 
 			top: 350, 
 			left: 350,
-			text: "Event three"
+			text: "Event three",
+			reward: 15,
+			time: 2
 		};
 		var nextCallTime = Math.random() * 60 * 1000;
 		var currentEvents = this.state.events;
-		currentEvents.push(newEvent);
+		currentEvents[newEvent.id] = newEvent;
 		this.setState({events: currentEvents});
 		window.setTimeout(this.generateTenderloinEvent, nextCallTime);
 	},
@@ -113,8 +179,9 @@ var GameComponent = React.createClass({
 	},
 
 	render: function(){
-		var events = this.state.events.map(function(event){
-			return <Event onClick={this.onClickEvent} key={event.id} type={event.type} left={event.left} top={event.top} id={event.id}/>;
+		var events = Object.keys(this.state.events).map(function(event){
+			var eventObj = this.state.events[event];
+			return <Event onClick={this.onClickEvent} key={eventObj.id} type={eventObj.type} left={eventObj.left} top={eventObj.top} id={eventObj.id}/>;
 		}.bind(this));
 
 		var eventDetail;
